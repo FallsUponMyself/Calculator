@@ -1,33 +1,35 @@
+// A dictionary to map operation strings to functions
+const operations = {
+    'add': (a, b) => a + b,
+    'subtract': (a, b) => a - b,
+    'multiply': (a, b) => a * b,
+    'divide': (a, b) => {
+        if (b === 0) {
+            throw new Error("Cannot divide by zero!");
+        }
+        return a / b;
+    }
+};
+
 function calculate() {
     const num1 = parseFloat(document.getElementById('num1').value);
     const num2 = parseFloat(document.getElementById('num2').value);
     const operation = document.getElementById('operation').value;
-    let result;
+    const resultElement = document.getElementById('result');
 
+    // Clear previous results or errors
+    resultElement.innerText = '';
+    
+    // Check for invalid numbers first
     if (isNaN(num1) || isNaN(num2)) {
-        result = "Error: Please enter valid numbers.";
-    } else {
-        switch (operation) {
-            case 'add':
-                result = num1 + num2;
-                break;
-            case 'subtract':
-                result = num1 - num2;
-                break;
-            case 'multiply':
-                result = num1 * num2;
-                break;
-            case 'divide':
-                if (num2 === 0) {
-                    result = "Error: Cannot divide by zero!";
-                } else {
-                    result = num1 / num2;
-                }
-                break;
-        }
+        resultElement.innerText = "Error: Please enter valid numbers.";
+        return;
     }
 
-    document.getElementById('result').innerText = `Result: ${result}`;
+    try {
+        const result = operations[operation](num1, num2);
+        resultElement.innerText = `Result: ${result}`;
+    } catch (e) {
+        resultElement.innerText = `Error: ${e.message}`;
+    }
 }
-
-
